@@ -21,7 +21,6 @@ def nSidedDie(p):
         if r>cp[k] and r<=cp[k+1]:
             d=k+1
             break
-    # print('Ramdom number generated {:1}'.format(d))
     return d
 
 def experiment(p,N):
@@ -38,9 +37,9 @@ def main():
     N = 10000
     R = experiment(p,N)
     roll_num, num_of_times_rolled = np.unique(R, return_counts=True)
-    plt.stem(roll_num,num_of_times_rolled, use_line_collection=True)
+    plt.stem(roll_num, (num_of_times_rolled * 0.0001), use_line_collection=True)
     plt.xlabel("Die Number")
-    plt.ylabel("Number of Times Rolled")
+    plt.ylabel("Probability")
     plt.title("Function for N-Side Die")
     plt.show()
 
