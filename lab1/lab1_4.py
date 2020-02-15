@@ -54,6 +54,7 @@ def experiment(N):
         m = 80000
         k = 7
         km = k*m
+        T = 319955
         hacker_pass_list = createPassList(km,i)
 
         if user_pass in hacker_pass_list:
@@ -65,8 +66,6 @@ def main():
     success_count  = experiment(1000)
     p1 = success_count / 1000
     print("Probabiliy of user password in hacker's list: %.2f" %p1)
-
-
 
 if __name__ == "__main__":
     main()

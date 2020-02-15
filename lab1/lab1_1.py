@@ -34,9 +34,13 @@ def experiment(p,N):
 def main(): 
     #create an array of probablities
     p = np.array([0.10,0.15,0.20, 0.05, 0.30, 0.10, 0.10])
+    # how many experiments to run
     N = 10000
+    # run the experiment 
     R = experiment(p,N)
+    # get the unique pmf for each roll
     roll_num, num_of_times_rolled = np.unique(R, return_counts=True)
+    # plot the dice number by its probability of showing up
     plt.stem(roll_num, (num_of_times_rolled * 0.0001), use_line_collection=True)
     plt.xlabel("Die Number")
     plt.ylabel("Probability")
