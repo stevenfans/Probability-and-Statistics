@@ -16,9 +16,10 @@ from random import randint
 # returns count of how many succesful experiments were performed
 def experiements(N):
     success_count = 0
+    # perform experiment N times 
     for i in range(0,N): 
         result = coinTossOnHeadSuccess()
-
+        # check if there was a success in that single experiment 
         if result==True:
             success_count += 1
     
@@ -47,9 +48,9 @@ def main():
     N = 100000
      # how many experiments to do
     R = experiements(N)
+    # get the percentage of the run 
     percentage = R/N * 100
-    print("Out of %d tosses, there is a %.2f%% to get success" %(N,percentage)
-    )
+    print("Out of %d tosses, there is a %.2f%% to get success" %(N,percentage))
 
 if __name__ == "__main__":
     main()

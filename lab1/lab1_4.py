@@ -35,6 +35,7 @@ def createPassList(m,E):
 
 # function creates random 4 letter word password
 def createPass():
+    # create empty password string
     password = ""
     for i in range (0,4):
         letter = choice(ascii_lowercase)
@@ -43,7 +44,8 @@ def createPass():
 
     return password
 
-def experiment(N):
+def experiment(N,list):
+    # initialize success counter
     success_count = 0
 
     for i in range(0,N):
@@ -51,10 +53,12 @@ def experiment(N):
         print("Experiment: %d" %i)
         user_pass = createPass()
         # create hacker password list
-        m = 80000
+        m = 80000  # Initial list size
         k = 7
-        km = k*m
-        T = 319955
+        km = k*m   # Used to check for a longer list
+        T = 319955 # Used to for p=0.5
+        # NOTE: Depending on the experiement, change the length of list variable 
+        #       in createPassList below
         hacker_pass_list = createPassList(km,i)
 
         if user_pass in hacker_pass_list:

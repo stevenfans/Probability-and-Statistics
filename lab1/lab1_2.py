@@ -13,11 +13,11 @@ from random import randint
 
 def experiment(N):
     s=np.zeros((N,1))
+    # peform experiment N times and store in array s
     for i in range(0,N):
         count_of_rolls = rollsTo7()
         s[i] = count_of_rolls
     return s
-
 
 def rollsTo7():
     count = 1
