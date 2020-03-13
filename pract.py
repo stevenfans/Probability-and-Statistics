@@ -51,3 +51,5 @@ def problem2():
     plt.ylabel('Probability')
     plt.xlim(right=15)
     plt.show()
+
+problem2()

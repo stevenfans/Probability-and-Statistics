@@ -40,27 +40,30 @@ def combo(n,r):
     n_minus_r_fact = m.factorial(n-r)
     denominator = r_fact * n_minus_r_fact
     result = numerator / denominator 
+    return result
 
 def binom(n,x):
     p = 0.003
     q = 1-p
 
     result = combo(n,x) * (p**x) * (q**(n-x))
+    return result
     
 
 def experiment(N): 
 
     n = 1000
-    exp = range(15)
-    binomial_distribution = [binom(x) for x in exp]
+    exp = range(13)
+    binomial_distribution = [binom(n,x) for x in exp]
 
-    roll_num, num_of_times_rolled = np.unique(success_array, return_counts=True)
+    roll_num, num_of_times_rolled = np.unique(binomial_distribution, return_counts=True)
     
     # plot the dice number by its probability of showing up
-    plt.stem(roll_num, (num_of_times_rolled * 0.0001), use_line_collection=True)
+    # plt.stem(roll_num, (num_of_times_rolled * 0.0001), use_line_collection=True)
+    plt.stem(exp,binomial_distribution)
     plt.xlabel("Number of Successes in n=1000 trials")
     plt.ylabel("Probability")
-    plt.title("Bernoulli Trials: PMF-Experimental Results")
+    plt.title("Bernoulli Trials: PMF- Binomial Forumla")
     plt.show()
 
 
