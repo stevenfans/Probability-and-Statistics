@@ -1,8 +1,13 @@
-
+# Calculations using the Binomial Distribution  
+# You have 3 identical mulit-side unfair dice with probability p.
+# One roll is a success if you get a one for the first die; two 
+# for the second die; three for the third die
+# Perform experiment 1000 times
 
 import numpy as np
 import random 
-import matplotlib.pyplot as pl
+import matplotlib.pyplot as plt
+import math as m
 
 def nSidedDie(p):
     n=np.size(p)
@@ -15,54 +20,56 @@ def nSidedDie(p):
             break
     return d
 
-def experiment(N):
-    # holding values
-    sList = []
-    rList = []
-    R = [] 
-    comp  =[]
-    # counter for erros
-    fails = 0
-    # given values
-    p0 = [.60,.40]
-    e0 = [.95,.05]
-    e1 = [.03,.97]
+def rolls():
+    # probability
+    p = np.array([0.2, 0.1, 0.15, 0.3, 0.2, 0.05])
+    success = 0
 
-    # perform test N times 
-    for test in range(N):
-        R = [] # list to hold bits
-        # perform probability test from assignment
-        S = nSidedDie(p0)-1
-        for i in range(3):
-            if (S==1):
-                R.append(nSidedDie(e1)-1)
-            else: 
-                R.append(nSidedDie(e0)-1)
-        # hold all the bits values
-        sList.append(S)
-        rList.append(R)
+    for times in range(0,1000):
+        die1 = nSidedDie(p)
+        die2 = nSidedDie(p)
+        die3 = nSidedDie(p)
 
-    # check for athe success
-    for bits in rList:
-        if bits.count(1) > bits.count(0):
-            comp.append(1)
-        else:
-            comp.append(0)
+        success+= 1 if die1==1 and die2==2 and die3==3 else 0
+    
+    return success
 
-    # find the number of fails
-    for i in range(N):
-        if sList[i] != comp[i]:
-            fails += 1;
+def combo(n,r):
+    numerator = m.factorial(n)
+    r_fact = m.factorial(r)
+    n_minus_r_fact = m.factorial(n-r)
+    denominator = r_fact * n_minus_r_fact
+    result = numerator / denominator 
 
-    # calculate the failers 
-    fails /= N
-    return fails
+def binom(n,x):
+    p = 0.003
+    q = 1-p
+
+    result = combo(n,x) * (p**x) * (q**(n-x))
+    
+
+def experiment(N): 
+
+    n = 1000
+    exp = range(15)
+    binomial_distribution = [binom(x) for x in exp]
+
+    roll_num, num_of_times_rolled = np.unique(success_array, return_counts=True)
+    
+    # plot the dice number by its probability of showing up
+    plt.stem(roll_num, (num_of_times_rolled * 0.0001), use_line_collection=True)
+    plt.xlabel("Number of Successes in n=1000 trials")
+    plt.ylabel("Probability")
+    plt.title("Bernoulli Trials: PMF-Experimental Results")
+    plt.show()
 
 
 def main(): 
-    N=100000
-    #create an array of probablities
-    print(experiment(N))
+    # experiment times 
+    N = 10000
+
+    experiment(N)
+
 
 if __name__ == "__main__":
     main()

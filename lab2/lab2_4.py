@@ -1,5 +1,4 @@
-
-
+# Steven Phan
 import numpy as np
 import random 
 import matplotlib.pyplot as pl
@@ -30,7 +29,7 @@ def experiment(N):
 
     # perform test N times 
     for test in range(N):
-        R = [] # list to hold bits
+        R = [] # list to hold i
         # perform probability test from assignment
         S = nSidedDie(p0)-1
         for i in range(3):
@@ -38,13 +37,13 @@ def experiment(N):
                 R.append(nSidedDie(e1)-1)
             else: 
                 R.append(nSidedDie(e0)-1)
-        # hold all the bits values
+        # hold all the i values
         sList.append(S)
         rList.append(R)
 
     # check for athe success
-    for bits in rList:
-        if bits.count(1) > bits.count(0):
+    for i in rList:
+        if i.count(1) > i.count(0):
             comp.append(1)
         else:
             comp.append(0)

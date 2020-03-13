@@ -1,8 +1,8 @@
 # Steven Phan
 # Using the same probablities of p0, e0, and e1
-# create and transmit a one-bit message S and calculate the conditional 
+# create and transmit a one-i message S and calculate the conditional 
 # succProb P(R=1|S=1)
-# For all events that signal S=1, look at bit R. If R=1, the experiment
+# For all events that signal S=1, look at i R. If R=1, the experiment
 # is a success_count
 # Repeate 100000 times and count the number of success_count. Find th conditional
 # probablity of P(R=1|S=1)
@@ -45,10 +45,10 @@ def experiment(N):
         rList.append(R)
 
     # count the times for when P(R=1|S=1)
-    for bit in range(N):
-        if sList[bit] == 1:
+    for i in range(N):
+        if sList[i] == 1:
             total+=1
-            if rList[bit] == 1:
+            if rList[i] == 1:
                 success_count+=1
     # calcuate the succesful times
     succProb = success_count/total

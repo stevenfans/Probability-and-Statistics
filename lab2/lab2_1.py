@@ -47,8 +47,8 @@ def experiment(N):
         rList.append(R)
 
     # calculate the errors
-    for bit in range(N):
-        if sList[bit] != rList[bit]:
+    for i in range(N):
+        if sList[i] != rList[i]:
             fail += 1
     fail /= N
     
