@@ -37,8 +37,6 @@ def CentralLim(nbooks):
     fig1=plt.figure(1)
     plt.bar(b1,h1,width=barwidth,edgecolor=edgecolor)
 
-
-
     f=gaussian(mu_x*nbooks,sig_x*np.sqrt(nbooks),b1)
     plt.plot(b1,f,'r')
     plt.title('Gaussian Distribution: Books={}'.format(nbooks))

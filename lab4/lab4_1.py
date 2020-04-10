@@ -1,6 +1,5 @@
 # Simulate Continous Random Variables with Selected Distributions
 
-
 import numpy as np
 import random 
 import matplotlib
@@ -37,22 +36,26 @@ plt.bar(b1,h1, width=barwidth, edgecolor=edgecolor)
 
 f = UnifPDF(a,b,b1)
 plt.plot(b1,f,'r')
+plt.title('Uniform Distribution')
+plt.xlabel('Random Variable')
+plt.ylabel('Probability')
 
+plt.show()
 # Calculate the mean and standard deviation
 mu_x = np.mean(x)
 sig_x = np.std(x)
 theo_calc = a + b/2
 exp_meas = (b-a)**2/12
 
-print("1.1 - Uniform Random Variable Calculations")
-print("Experimental Measurement for Expectation:", mu_x)
-print("Theoretical  Measurement for Expectation:", theo_calc)
-print("Experimental Measurement for Standard Deviation:",sig_x)
-print("Theoretical  Measurement for Standard Deviation:",exp_meas)
-print("")
+print("Uniform Random Variable")
+print("Expectation Experimental Measurement:", mu_x)
+print("Expectation Theoretical  Measurement for Expectation:", theo_calc)
+print("Starndard Deviation Experimental Measurement:",sig_x)
+print("Standard DeviaitonTheoretical  Measurement:",exp_meas)
+print("\n")
 
 #----- 1.2 Simulate an Exponentiallly distrubuted Random Variable -------------
-beta = 40
+beta = 40; a = 1.0; b = 200; n = 10000
 
 # Generate the values of the RV x
 x = np.random.exponential(beta,n) 
@@ -80,19 +83,33 @@ plt.plot(b1,f,'r')
 
 # Plot the exponential pdf
 def ExpoPDF(beta,x):
-    f = (1/beta) * np.exp((-1 / beta) * x)* np.ones(np.size(x))
+    f = (1/beta)*(np.exp(((-1/beta)*x))* np.ones(np.size(x)))
     return f
+
 f = ExpoPDF(beta,b1)
+
 plt.plot(b1,f,'r')
 plt.title('Exponential Distribution')
 plt.xlabel('Random Variable')
 plt.ylabel('Probability')
-
 plt.show()
+
+# Calculate the mean and standard deviation
+mu_x = np.mean(x) 
+sig_x = np.std(x)
+theo_calc =beta
+exp_meas = beta
+
+print("Exponentially Random Variable")
+print("Expectation Experimental Measurement:", mu_x)
+print("Expectation Theoretical  Measurement for Expectation:", theo_calc)
+print("Starndard Deviation Experimental Measurement:",sig_x)
+print("Standard DeviaitonTheoretical  Measurement:",exp_meas)
+print("\n")
 
 
 #----- 1.3 Simulate a Normal Random Variable -------------
-mu = 2.4; sigma = 0.75;
+mu = 2.5; sigma = 0.75; a=1; b=5; 
 
 # Generate the vles of the RV x
 x = np.random.normal(mu,sigma,n) 
@@ -117,14 +134,26 @@ plt.bar(b1,h1, width=barwidth, edgecolor=edgecolor)
 
 # Plot the Normal PDF
 def NormPDF(mu,sigma,x):
-    f=(   (1/(sigma * math.sqrt(2 * math.pi))) * np.exp((-1 * ((x - mu)**2)) / (2 * (sigma**2))) * np.ones(np.size(x)))
+    f=((1/(sigma*math.sqrt(2*math.pi)))*(np.exp((-1*((x-mu)**2))/(2*(sigma**2)))*np.ones(np.size(x))))
     return f
 
 f = NormPDF(mu,sigma,b1)
-plt.plot(b1,f,'r')
 
+plt.plot(b1,f,'r')
 plt.title('Normal Distribution')
 plt.xlabel('Random Variable')
 plt.ylabel('Probability')
-
 plt.show()
+
+# Calculate the mean and standard deviation
+mu_x = np.mean(x) 
+sig_x = np.std(x)
+theo_calc = mu
+exp_meas = sigma
+
+print("Normal Random Variable")
+print("Expectation Experimental Measurement:", mu_x)
+print("Expectation Theoretical  Measurement for Expectation:", theo_calc)
+print("Stanndard Deviation Experimental Measurement:",sig_x)
+print("Standard DeviaitonTheoretical  Measurement:",exp_meas)
+print("\n")
