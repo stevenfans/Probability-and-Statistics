@@ -7,10 +7,7 @@ import matplotlib.pyplot as plt
 import math
 
 #----- 1.1 Simulate a Uniform Random Variable -------------
-# Plot the Uniform PDF
-def UnifPDF(a,b,x): 
-    f = (1/abs(b-1))*np.ones(np.size(x))
-    return f
+
 
 # Generate the vlues of the RV X
 a = 1.0; b = 4.0; n = 10000
@@ -34,13 +31,18 @@ plt.close('all')
 fig1 = plt.figure(1)
 plt.bar(b1,h1, width=barwidth, edgecolor=edgecolor)
 
+# Plot the Uniform PDF
+def UnifPDF(a,b,x): 
+    f = (1/abs(b-1))*np.ones(np.size(x))
+    return f
+
 f = UnifPDF(a,b,b1)
 plt.plot(b1,f,'r')
 plt.title('Uniform Distribution')
 plt.xlabel('Random Variable')
 plt.ylabel('Probability')
-
 plt.show()
+
 # Calculate the mean and standard deviation
 mu_x = np.mean(x)
 sig_x = np.std(x)
@@ -81,7 +83,7 @@ plt.bar(b1,h1, width=barwidth, edgecolor=edgecolor)
 f = UnifPDF(a,b,b1)
 plt.plot(b1,f,'r')
 
-# Plot the exponential pdf
+# Plot the Exponential PDF
 def ExpoPDF(beta,x):
     f = (1/beta)*(np.exp(((-1/beta)*x))* np.ones(np.size(x)))
     return f

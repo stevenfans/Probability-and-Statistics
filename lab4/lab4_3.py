@@ -1,57 +1,71 @@
-# Approximation of Binomial by Poisson Distribution 
-# You have 3 identical mulit-side unfair dice with probability p.
-# One roll is a success if you get a one for the first die; two 
-# for the second die; three for the third die
-# Perform experiment 1000 times
-
+# Distrubution of the SUm of Exponential RVs
 import numpy as np
 import random 
 import matplotlib.pyplot as plt
-import math as m
+import math
 
-def nSidedDie(p):
-    n=np.size(p)
-    cs=np.cumsum(p)
-    cp=np.append(0,cs)
-    r=random.random()
-    for k in range(0,n):
-        if r>cp[k] and r<=cp[k+1]:
-            d=k+1
-            break
-    return d
+# Generate the values of the RV x
+beta = 40; N = 10000; a = 1; b = 2000
+
+carton = [None]*24 # pre allocate array to hold 24 elements
+all_cartons = []    # hold all the sum of the 24 elements
+
+for k in range(N):
+    # each one of 24 elements is exponentially distrubted random variable T
+    carton = np.random.exponential(beta,24)
+    # C = T1+T2+...T24
+    C = sum(carton)
+    all_cartons.append(C)
+
+# Create bins and histogram
+    nbins=30;       # Number of bins
+    edgecolor='w'   # Color separating bars in the bargraph
+    bins=[float(x) for x in np.linspace(a, b, nbins+1)]
+    h1, bin_edges = np.histogram(all_cartons,bins,density=True)
+
+# Define points on the horizontal axis
+be1 = bin_edges[0:np.size(bin_edges) - 1]
+be2 = bin_edges[1:np.size(bin_edges)]
+b1 = (be1+be2)/2
+barwidth = b1[1] - b1[0] #Width of bars in the bargraph
+plt.close('all')
+
+# Plot the Bar Graph
+fig1=plt.figure(1)
+plt.bar(b1,h1, width=barwidth, edgecolor=edgecolor)
+
+# Plot the Normal PDF
+def NormPDF(mu,sigma,x):
+    f=((1/(sigma*math.sqrt(2*math.pi)))*(np.exp((-1*((x-mu)**2))/(2*(sigma**2)))*np.ones(np.size(x))))
+    return f
+
+# Calculate the mean and std
+mu_x = 24 * beta
+sig_x = math.sqrt(24) * beta
+
+f = NormPDF(mu_x, sig_x, b1)
+plt.plot(b1,f,'r')
+plt.title('Normal Distribution')
+plt.xlabel('Random Variable')
+plt.ylabel('Probability')
+plt.show()
+
+# Create a new figure for CDF plot
+fig2=plt.figure(2)
+
+# Plot the CDF
+def plotCDF(mu,sigma,carton,b1):
+    fnorm = NormPDF(mu,sigma,b1)
+    fcdf = np.cumsum(barwidth * f)
+    return fcdf
+
+h1 = np.cumsum(h1*barwidth)
+f = plotCDF(mu_x,sig_x,carton,b1)
+plt.bar(b1,h1, width=barwidth, edgecolor=edgecolor)
+plt.plot(b1,f,'r')
+plt.title('Normal Distribution')
+plt.xlabel('Random Variable')
+plt.ylabel('Probability')
+plt.show()
 
 
-def poisson(n,x):
-    # p = 0.2*0.1*0.15
-    p = 0.003
-    lambduh = n*p
-    # poinson formula
-    numerator = (lambduh**x)*(m.e**(-lambduh))
-    denominator = m.factorial(x)
-    result = numerator/denominator
-    return result
-    
-def experiment(): 
-
-    # experiment trials
-    n = 1000
-    # the bernoulli trial had 12 successe
-    exp = range(13)
-    # perform the poisson distribution
-    poisson_distribution = [poisson(n,x) for x in exp]
-
-    # plot the success
-    plt.stem(exp,poisson_distribution)
-    plt.xlabel("Number of Successes in n=1000 trials")
-    plt.ylabel("Probability")
-    plt.title("Bernoulli Trials: PMF- Poisson Approximation")
-    plt.show()
-
-
-def main(): 
-    # run experiment
-    experiment()
-
-
-if __name__ == "__main__":
-    main()
