@@ -3,66 +3,59 @@ import random
 import matplotlib.pyplot as plt
 import math
 
-a=1; b= 2000; beta = 40; N = 10000
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Problem 2 - The Central Limit Theorem
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+def problem2(nbooks):
+    # Generate the values of the RV X
+    N = 10000; a=1; b=4; #nbooks 1,5,10,15
+    mu_x = (a+b)/2
+    sig_x=np.sqrt((b-1)**2/12)
+    X =np.zeros((N,1))
+    for k in range(0,N):
+        x=np.random.uniform(a,b,nbooks)
+        w=np.sum(x)
+        X[k] = w
 
-n=24
-carton = []
-cartonSums = []
+    # Create bins and histogram
+    nbins=30 #Number of bins
+    edgecolor='w' # Color separating bars in bargraph
+    bins=[float(x) for x in np.linspace(nbooks*a,nbooks*b,nbins+1)]
+    h1,bin_edges = np.histogram(X,bins,density=True)
+    # Define points on horizontal axis
+    be1=bin_edges[0:np.size(bin_edges)-1]
+    be2=bin_edges[1:np.size(bin_edges)]
+    b1=(be1+be2)/2
+    barwidth=b1[1]-b1[0] #Width of bars in graph
+    plt.close('all')
 
-for i in range(N):
-    carton = np.random.exponential(beta, n)
+    # Plot the bar graph
+    fig1=plt.figure(1)
+    plt.bar(b1,h1,width=barwidth,edgecolor=edgecolor)
 
-    C = (sum(carton)) # b = sum(a)
-    cartonSums.append(C)
+    # Plot the Gaussian Function
+    def gaussian (mu,sig,z):
+        f=np.exp(-(z-mu)**2/(2*sig**2))/(sig*np.sqrt(2*np.pi))
+        return f
 
+    f = gaussian(mu_x*nbooks,sig_x*np.sqrt(nbooks),b1)
+    plt.plot(b1,f,'r')
+    plt.title('Gaussian Distribution: Books={}'.format(nbooks))
+    plt.xlabel('Random Variable')
+    plt.ylabel('Probability')
+    plt.show()
 
-# Calculate average and standard deviation
-mu_c = 24 * beta
-sig_c = beta * math.sqrt(24)
+    # Calculate mean and standard deviation
+    mu_x=(a+b)/2 * nbooks
+    sig_x=np.sqrt((b-a)**2/12) * np.sqrt(nbooks)
 
-# Create bins and histogram
-nbins=30; # Number of bins
-edgecolor='w'; # Color separating bars in the bargraph
-#
-bins=[float(carton) for carton in np.linspace(a, b,nbins+1)] # ISSUE: Should I have a and b for this problem?
-h1, bin_edges = np.histogram(cartonSums,nbins,density=True) # HAD TO ADD cartonSums as a paremeter
+    print("Calculations for {} books".format(nbooks))
+    print("Median: " + str(mu_x))
+    print("Standard Deviation: " + str(sig_x))
+    print("")
 
-# Define points on the horizontal axis
-be1=bin_edges[0:np.size(bin_edges)-1]
-be2=bin_edges[1:np.size(bin_edges)]
-b1=(be1+be2)/2
-barwidth=b1[1]-b1[0] # Width of bars in the bargraphz
-plt.close('all')
-
-# Plot bar graph
-fig1=plt.figure(1)
-plt.bar(b1,h1, width=barwidth, edgecolor=edgecolor)
-
-def NormPDF(mu, sigma,x):
-    f=((1/(sigma*math.sqrt(2*math.pi))*np.exp((-1*((x-mu)**2))/(2*(sigma**2)))*np.ones(np.size(x))))
-    return f
-
-# Plot PDF
-f = NormPDF(mu_c, sig_c, b1)
-plt.plot(b1,f,'r')
-plt.title("PDF of Exponential RV's")
-plt.xlabel('Lifetime of a battery in days - T')
-plt.ylabel('PDF')
-plt.show()
-
-# Plot bar graph
-fig2=plt.figure(2)
-
-def CDF(carton, mu, sigma, x):
-    PDFResult = NormPDF(mu, sigma, x)
-    CDF = np.cumsum(barwidth * PDFResult)
-    return CDF
-
-h1 = np.cumsum(h1 * barwidth)
-f = CDF(carton, mu_c, sig_c, b1)
-plt.bar(b1,h1, width=barwidth, edgecolor=edgecolor)
-plt.plot(b1, f, 'r')
-plt.title("CDF of the Sum of Exponential RV's")
-plt.xlabel('Cumulative sums of a battery lifetime in days - T')
-plt.ylabel('CDF')
-plt.show()
+# Repeat for 1, 5, 10, and 15 books
+problem2( 1)
+problem2( 5)
+problem2(10)
+problem2(15)
