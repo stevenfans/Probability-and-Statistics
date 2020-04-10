@@ -5,6 +5,7 @@ import numpy as np
 import random 
 import matplotlib
 import matplotlib.pyplot as plt
+import math
 
 #----- 1.1 Simulate a Uniform Random Variable -------------
 # Plot the Uniform PDF
@@ -91,4 +92,39 @@ plt.show()
 
 
 #----- 1.3 Simulate a Normal Random Variable -------------
+mu = 2.4; sigma = 0.75;
 
+# Generate the vles of the RV x
+x = np.random.normal(mu,sigma,n) 
+
+# Create bins and histogram
+nbins = 30;     # Number of bins
+edgecolor = 'w' # Color seperating bars in the bargraph 
+
+bins = [float(x) for x in np.linspace(a,b,nbins+1)]
+h1, bin_edges = np.histogram(x,bins,density=True)
+
+# Define points on the horizontal axis
+be1 = bin_edges[0:np.size(bin_edges) - 1]
+be2 = bin_edges[1:np.size(bin_edges)]
+b1 = (be1+be2)/2
+barwidth = b1[1] - b1[0] #Width of bars in the bargraph
+plt.close('all')
+
+# Plot the Bar Graph
+fig1 = plt.figure(1)
+plt.bar(b1,h1, width=barwidth, edgecolor=edgecolor)
+
+# Plot the Normal PDF
+def NormPDF(mu,sigma,x):
+    f=(   (1/(sigma * math.sqrt(2 * math.pi))) * np.exp((-1 * ((x - mu)**2)) / (2 * (sigma**2))) * np.ones(np.size(x)))
+    return f
+
+f = NormPDF(mu,sigma,b1)
+plt.plot(b1,f,'r')
+
+plt.title('Normal Distribution')
+plt.xlabel('Random Variable')
+plt.ylabel('Probability')
+
+plt.show()
