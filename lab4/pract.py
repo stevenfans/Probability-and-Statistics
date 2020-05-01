@@ -1,13 +1,11 @@
-
-
 import numpy as np
 import random 
 import matplotlib.pyplot as plt
+import math
 
-import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
-
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Problem 2 - The Central Limit Theorem
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 def problem2(nbooks):
     # Generate the values of the RV X
     N = 10000; a=1; b=4; #nbooks 1,5,10,15
