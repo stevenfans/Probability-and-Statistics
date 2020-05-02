@@ -21,7 +21,7 @@ def main():
         # create sample points
         x = pop[random.sample(range(N),num)]
         #  get the mean 
-        mean = x.mean()
+        mean = np.mean(x)
         allMean.append(mean)
 
     # Get the standard deviation curve for 95%

@@ -10,7 +10,7 @@ import math
 N = 1500000
 u = 55
 o = 5
-n = range(1,201)
+n = list(range(1,201,1))
 
 # create random normal
 pop = np.random.normal(u,o,N)
