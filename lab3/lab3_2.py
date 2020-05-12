@@ -31,8 +31,7 @@ def combo(n,r):
     return result
 
 def binom(n,x):
-    # p = 0.2*0.1*0.15
-    p = 0.003
+    p = 0.66
     q = 1-p
     # binomial distribution formulas
     result = combo(n,x) * (p**x) * (q**(n-x))
@@ -42,18 +41,18 @@ def binom(n,x):
 def experiment(): 
 
     # experiment trials
-    n = 1000
+    n = 100
     # the bernoulli trial had 12 successe
-    exp = range(13)
+    exp = range(100)
 
     # perform the binomial distribution
     binomial_distribution = [binom(n,x) for x in exp]
-
+    print(binomial_distribution)
     # plot the success
     plt.stem(exp,binomial_distribution)
     plt.xlabel("Number of Successes in n=1000 trials")
     plt.ylabel("Probability")
-    plt.title("Bernoulli Trials: PMF- Binomial Forumla")
+    plt.title(" PMF- Binomial Forumla for 66% Success")
     plt.show()
 
 
@@ -61,6 +60,7 @@ def main():
 
     # run experiment 
     experiment()
+
 
 
 if __name__ == "__main__":
