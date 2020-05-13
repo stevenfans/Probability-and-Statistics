@@ -70,11 +70,12 @@ def experiment(n,switch):
 
 def main():
     # print(monty(0,1))
-    n = 100
+    n = 25
     # print(experiment(20))
-    exp = range(100)
+    exp = range(10000)
 
     test  = [experiment(n,True) for x in exp]
+    print(test)
     test2 = [experiment(n,False) for x in exp]
     
     val, cnt = np.unique(test, return_counts=True)
@@ -88,13 +89,20 @@ def main():
     # plot the success
     # plt.stem(exp,test)
     plt.figure(1)
-    plt.subplot(2,1,1)
+    plt.subplot(3,1,1)
     plt.title("Binomial PMF: Switch Door")
     plt.stem(val,pmf, use_line_collection=True)
     plt.xlabel("Number of Successes in n="+str(n)+" trials")
     plt.ylabel("Probability")    
-    plt.subplot(2,1,2)
+    plt.subplot(3,1,2)
     plt.stem(val2,pmf2)
+    plt.xlabel("Number of Successes in n="+str(n)+" trials")
+    plt.ylabel("Probability")
+    plt.title("Binomial PMF: Don't Switch Door")
+
+    plt.subplot(3,1,3)
+    plt.stem(val,pmf, use_line_collection=True,markerfmt='bo')
+    plt.stem(val2,pmf2,use_line_collection=True,markerfmt='go')
     plt.xlabel("Number of Successes in n="+str(n)+" trials")
     plt.ylabel("Probability")
     plt.title("Binomial PMF: Don't Switch Door")
