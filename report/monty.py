@@ -92,6 +92,7 @@ def main():
     plt.subplot(3,1,1)
     plt.title("Binomial PMF: Switch Door")
     plt.stem(val,pmf, use_line_collection=True)
+    plt.plot(val,pmf)
     plt.xlabel("Number of Successes in n="+str(n)+" trials")
     plt.ylabel("Probability")    
     plt.subplot(3,1,2)
