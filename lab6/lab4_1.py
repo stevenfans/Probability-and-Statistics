@@ -1,4 +1,4 @@
-# Simulate Continous Random Variables with Selected Distributions
+# A 3-State markov Chain
 
 import numpy as np
 import random 
@@ -6,164 +6,114 @@ import matplotlib
 import matplotlib.pyplot as plt
 import math
 
-#----- 1.1 Simulate a Uniform Random Variable -------------
-def prob1_1():
-    # Generate the vlues of the RV X
-    a = 1.0; b = 4.0; n = 10000
-    x = np.random.uniform(a,b,n)
 
-    # Create bins and histogram
-    nbins = 30;     # Number of bins
-    edgecolor = 'w' # Color seperating bars in the bargraph 
+initial = [1/4,0,3/4]
+P       = [[1/2, 1/4, 1/4],[1/4,1/8, 5/8],[1/3,2/3,0]]
 
-    bins = [float(x) for x in np.linspace(a,b,nbins+1)]
-    h1, bin_edges = np.histogram(x,bins,density=True)
+def nSidedDie(p):
+    n=np.size(p)
+    cs=np.cumsum(p)
+    cp=np.append(0,cs)
+    r=random.random()
+    for k in range(0,n):
+        if r>cp[k] and r<=cp[k+1]:
+            d=k+1
+            break
+    return d
 
-    # Define points on the horizontal axis
-    be1 = bin_edges[0:np.size(bin_edges) - 1]
-    be2 = bin_edges[1:np.size(bin_edges)]
-    b1 = (be1+be2)/2
-    barwidth = b1[1] - b1[0] #Width of bars in the bargraph
-    plt.close('all')
+def nSideDie0(p):
+    return nSidedDie(p) - 1
 
-    # Plot the Bar Graph
-    fig1 = plt.figure(1)
-    plt.bar(b1,h1, width=barwidth, edgecolor=edgecolor)
+def makeMarkov(chainLength):
+    S = [nSideDie0(initial)]
+    for i in range(chainLength-1):
+        if S[-1] == 0:
+            S.append(nSideDie0(P[0]))
+        elif S[-1] == 1:
+            S.append(nSideDie0(P[1]))
+        elif S[-1] == 2:
+            S.append(nSideDie0(P[2]))
+    return S
 
-    # Plot the Uniform PDF
-    def UnifPDF(a,b,x): 
-        f = (1/abs(b-1))*np.ones(np.size(x))
-        return f
+def markovChain3(P,initial,length): 
 
-    f = UnifPDF(a,b,b1)
-    plt.plot(b1,f,'r')
-    plt.title('Uniform Distribution')
-    plt.xlabel('Random Variable')
-    plt.ylabel('Probability')
+    # crate array to hold all states
+    allState = []
+    # get the initial state
+    state = nSidedDie(initial)-1
+    allState.append(state)
+    
+    # sub length by 1, b/c index ssstarts at 0
+    length -= 1
+    
+    # create chain up to the length size
+    for i in range(length):
+        #check the previous state
+        if allState[-1] == 0:
+            allState.append(nSidedDie(P[0])-1)
+        elif allState[-1] == 1:
+            allState.append(nSidedDie(P[1])-1)
+        else: 
+            allState.append(nSidedDie(P[2])-1)
+
+    # return all the states
+    return allState
+
+def markovExperiment(P,initial,N):
+
+    # create a chain of length 15, for N times
+    experiment = [markovChain3(P,initial,15) for i in range(N)]
+
+    # transponse the matrix to count the occurences 
+    transposed = np.transpose(experiment)
+
+    # state0 = [] 
+    # state1 = [] 
+    # state2 = []
+    # state3 = []
+
+    # for i in transposed:
+    #     state0.append(list(i).count(0)/N)
+    #     state1.append(list(i).count(1)/N)
+    #     state2.append(list(i).count(2)/N)
+
+    state0 = [list(i).count(0)/N for i in transposed]
+    state1 = [list(i).count(1)/N for i in transposed]
+    state2 = [list(i).count(2)/N for i in transposed]
+
+    print('test')
+
+    return (state0,state1,state2)
+
+def main(): 
+    P       = [[1/2,1/4,1/4],[1/4,1/8, 5/8],[1/3,2/3,0]]
+    initial = [1/4,0,3/4]
+    n = 15    # chain length
+    N = 10000 # experiments
+
+    
+    states = markovChain3(P,initial,n)
+    state0,state1,state2 = markovExperiment(P,initial,100)
+
+    # # Generate and plot 1 markov chain
+    plt.figure("Single Run")
+    plt.plot(range(n),states,"ro",LINESTYLE='--')
+    plt.title("A sample simulation run of a three-state Markov Chain")
+    plt.ylabel("State")
+    plt.xlabel("Step Number")
     plt.show()
 
-    # Calculate the mean and standard deviation
-    mu_x = np.mean(x)
-    sig_x = np.std(x)
-    theo_calc = a + b/2
-    exp_meas = (b-a)**2/12
-
-    print("Uniform Random Variable")
-    print("Expectation Experimental Measurement:", mu_x)
-    print("Expectation Theoretical  Measurement for Expectation:", theo_calc)
-    print("Starndard Deviation Experimental Measurement:",sig_x)
-    print("Standard DeviaitonTheoretical  Measurement:",exp_meas)
-    print("\n")
-
-#----- 1.2 Simulate an Exponentiallly distrubuted Random Variable -------------
-def prob1_2():
-    beta = 40; a = 1.0; b = 200; n = 10000
-
-    # Generate the values of the RV x
-    x = np.random.exponential(beta,n) 
-
-    # Create bins and histogram
-    nbins = 30;     # Number of bins
-    edgecolor = 'w' # Color seperating bars in the bargraph 
-
-    bins = [float(x) for x in np.linspace(a,b,nbins+1)]
-    h1, bin_edges = np.histogram(x,bins,density=True)
-
-    # Define points on the horizontal axis
-    be1 = bin_edges[0:np.size(bin_edges) - 1]
-    be2 = bin_edges[1:np.size(bin_edges)]
-    b1 = (be1+be2)/2
-    barwidth = b1[1] - b1[0] #Width of bars in the bargraph
-    plt.close('all')
-
-    # Plot the Bar Graph
-    fig1 = plt.figure(1)
-    plt.bar(b1,h1, width=barwidth, edgecolor=edgecolor)
-
-    # Plot the Exponential PDF
-    def ExpoPDF(beta,x):
-        f = (1/beta)*(np.exp(((-1/beta)*x))* np.ones(np.size(x)))
-        return f
-
-    f = ExpoPDF(beta,b1)
-
-    plt.plot(b1,f,'r')
-    plt.title('Exponential Distribution')
-    plt.xlabel('Random Variable')
-    plt.ylabel('Probability')
+    plt.figure("Multiple Runs")
+    plt.plot(range(n),state0,'o',label="State 0",LINESTYLE='--')
+    plt.plot(range(n),state1,'o',label="State 1",LINESTYLE='--')
+    plt.plot(range(n),state2,'o',label="State 2",LINESTYLE='--')
+    plt.title("Simulate three-stae Markov Chain")
+    plt.ylabel("Probability")
+    plt.xlabel("Step Number")
+    plt.legend()
     plt.show()
 
-    # Calculate the mean and standard deviation
-    mu_x = np.mean(x) 
-    sig_x = np.std(x)
-    theo_calc =beta
-    exp_meas = beta
-
-    print("Exponentially Random Variable")
-    print("Expectation Experimental Measurement:", mu_x)
-    print("Expectation Theoretical  Measurement for Expectation:", theo_calc)
-    print("Starndard Deviation Experimental Measurement:",sig_x)
-    print("Standard DeviaitonTheoretical  Measurement:",exp_meas)
-    print("\n")
 
 
-#----- 1.3 Simulate a Normal Random Variable -------------
-def prob1_3():
-    mu = 2.5; sigma = 0.75; a=1; b=5; n = 10000
-
-    # Generate the vles of the RV x
-    x = np.random.normal(mu,sigma,n) 
-
-    # Create bins and histogram
-    nbins = 30;     # Number of bins
-    edgecolor = 'w' # Color seperating bars in the bargraph 
-
-    bins = [float(x) for x in np.linspace(a,b,nbins+1)]
-    h1, bin_edges = np.histogram(x,bins,density=True)
-
-    # Define points on the horizontal axis
-    be1 = bin_edges[0:np.size(bin_edges) - 1]
-    be2 = bin_edges[1:np.size(bin_edges)]
-    b1 = (be1+be2)/2
-    barwidth = b1[1] - b1[0] #Width of bars in the bargraph
-    plt.close('all')
-
-    # Plot the Bar Graph
-    fig1 = plt.figure(1)
-    plt.bar(b1,h1, width=barwidth, edgecolor=edgecolor)
-
-    # Plot the Normal PDF
-    def NormPDF(mu,sigma,x):
-        f=((1/(sigma*math.sqrt(2*math.pi)))*(np.exp((-1*((x-mu)**2))/(2*(sigma**2)))*np.ones(np.size(x))))
-        return f
-
-    f = NormPDF(mu,sigma,b1)
-
-    plt.plot(b1,f,'r')
-    plt.title('Normal Distribution')
-    plt.xlabel('Random Variable')
-    plt.ylabel('Probability')
-    plt.show()
-
-    # Calculate the mean and standard deviation
-    mu_x = np.mean(x) 
-    sig_x = np.std(x)
-    theo_calc = mu
-    exp_meas = sigma
-
-    print("Normal Random Variable")
-    print("Expectation Experimental Measurement:", mu_x)
-    print("Expectation Theoretical  Measurement for Expectation:", theo_calc)
-    print("Stanndard Deviation Experimental Measurement:",sig_x)
-    print("Standard DeviaitonTheoretical  Measurement:",exp_meas)
-    print("\n")
-
-
-def main():
-    prob1_1()
-    prob1_2()
-    prob1_3()
-
-
-if __name__=="__main__":
-    main()
+if __name__ == "__main__":
+    main(); 
