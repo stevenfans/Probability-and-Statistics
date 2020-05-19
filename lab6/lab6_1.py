@@ -66,7 +66,7 @@ def main():
     N = 10000 # experiments
 
     states = markovChain3(P,initial,n)
-    state0,state1,state2 = markovExperiment(P,initial,100)
+    state0,state1,state2 = markovExperiment(P,initial,N)
 
     # # Generate and plot 1 markov chain
     plt.figure("Single Run")

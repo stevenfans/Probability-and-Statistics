@@ -44,7 +44,7 @@ def markovChain5(P,initial,length):
     return allState
 
 def main(): 
-    initial = [0.2,0.2,0.2,0.2,0.2] # always state 2
+    initial = [0.2,0.2,0.2,0.2,0.2] # equal randomness
 
     # Define the State Transition Matrix P
     P       = [ [1,0,0,0,0],\
