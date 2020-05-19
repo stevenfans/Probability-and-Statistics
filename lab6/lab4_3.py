@@ -4,68 +4,68 @@ import random
 import matplotlib.pyplot as plt
 import math
 
-# Generate the values of the RV x
-beta = 40; N = 10000; a = 1; b = 2000
+def nSidedDie(p):
+    n=np.size(p)
+    cs=np.cumsum(p)
+    cp=np.append(0,cs)
+    r=random.random()
+    for k in range(0,n):
+        if r>cp[k] and r<=cp[k+1]:
+            d=k+1
+            break
+    return d
 
-carton = [None]*24 # pre allocate array to hold 24 elements
-all_cartons = []    # hold all the sum of the 24 elements
+def markovChain5(P,initial,length): 
 
-for k in range(N):
-    # each one of 24 elements is exponentially distrubted random variable T
-    carton = np.random.exponential(beta,24)
-    # C = T1+T2+...T24
-    C = sum(carton)
-    all_cartons.append(C)
+    # crate array to hold all states
+    allState = []
+    # get the initial state
+    state = nSidedDie(initial)-1
+    allState.append(state)
+    
+    # sub length by 1, b/c index starts at 0
+    length -= 1
+    
+    # create chain up to the length size
+    for i in range(length):
+        #check the previous state
+        if allState[-1] == 0:
+            allState.append(nSidedDie(P[0])-1)
+        elif allState[-1] == 1:
+            allState.append(nSidedDie(P[1])-1)
+        elif allState[-1] == 2:
+            allState.append(nSidedDie(P[2])-1)
+        elif allState[-1] == 3:
+            allState.append(nSidedDie(P[3])-1)
+        else: 
+            allState.append(nSidedDie(P[4])-1)
 
-# Create bins and histogram
-    nbins=30;       # Number of bins
-    edgecolor='w'   # Color separating bars in the bargraph
-    bins=[float(x) for x in np.linspace(a, b, nbins+1)]
-    h1, bin_edges = np.histogram(all_cartons,bins,density=True)
+    # return all the states
+    return allState
 
-# Define points on the horizontal axis
-be1 = bin_edges[0:np.size(bin_edges) - 1]
-be2 = bin_edges[1:np.size(bin_edges)]
-b1 = (be1+be2)/2
-barwidth = b1[1] - b1[0] #Width of bars in the bargraph
-plt.close('all')
+def main(): 
+    initial = [0.2,0.2,0.2,0.2,0.2] # always state 2
 
-# Plot the Bar Graph
-fig1=plt.figure(1)
-plt.bar(b1,h1, width=barwidth, edgecolor=edgecolor)
+    # Define the State Transition Matrix P
+    P       = [ [1,0,0,0,0],\
+                [0.3,0,0.7,0,0],\
+                [0,0.5,0,0.5,0],\
+                [0,0,0.6,0,0.4],\
+                [0,0,0,0,1]]
+    n = 15
 
-# Plot the Normal PDF
-def NormPDF(mu,sigma,x):
-    f=((1/(sigma*math.sqrt(2*math.pi)))*(np.exp((-1*((x-mu)**2))/(2*(sigma**2)))*np.ones(np.size(x))))
-    return f
+    # chain can start at any random transient state
+    # create single run 
+    states = markovChain5(P,initial,n)
 
-# Calculate the mean and std
-mu_x = 24 * beta
-sig_x = math.sqrt(24) * beta
-
-f = NormPDF(mu_x, sig_x, b1)
-plt.plot(b1,f,'r')
-plt.title('Normal Distribution')
-plt.xlabel('Random Variable')
-plt.ylabel('Probability')
-plt.show()
-
-# Create a new figure for CDF plot
-fig2=plt.figure(2)
-
-# Plot the CDF
-def plotCDF(mu,sigma,carton,b1):
-    fnorm = NormPDF(mu,sigma,b1)
-    fcdf = np.cumsum(barwidth * f)
-    return fcdf
-
-h1 = np.cumsum(h1*barwidth)
-f = plotCDF(mu_x,sig_x,carton,b1)
-plt.bar(b1,h1, width=barwidth, edgecolor=edgecolor)
-plt.plot(b1,f,'r')
-plt.title('Normal Distribution')
-plt.xlabel('Random Variable')
-plt.ylabel('Probability')
-plt.show()
+    # # Generate and plot 1 markov chain
+    plt.figure("Single Run")
+    plt.plot(range(n),states,"ro",LINESTYLE='--')
+    plt.title("A sample simulation run of a five-state Markov Chain")
+    plt.ylabel("State")
+    plt.xlabel("Step Number")
+    plt.show()
 
 
+if __name__ == "__main__": 
+    main()

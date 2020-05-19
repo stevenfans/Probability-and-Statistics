@@ -21,20 +21,6 @@ def nSidedDie(p):
             break
     return d
 
-def nSideDie0(p):
-    return nSidedDie(p) - 1
-
-def makeMarkov(chainLength):
-    S = [nSideDie0(initial)]
-    for i in range(chainLength-1):
-        if S[-1] == 0:
-            S.append(nSideDie0(P[0]))
-        elif S[-1] == 1:
-            S.append(nSideDie0(P[1]))
-        elif S[-1] == 2:
-            S.append(nSideDie0(P[2]))
-    return S
-
 def markovChain3(P,initial,length): 
 
     # crate array to hold all states
@@ -67,21 +53,9 @@ def markovExperiment(P,initial,N):
     # transponse the matrix to count the occurences 
     transposed = np.transpose(experiment)
 
-    # state0 = [] 
-    # state1 = [] 
-    # state2 = []
-    # state3 = []
-
-    # for i in transposed:
-    #     state0.append(list(i).count(0)/N)
-    #     state1.append(list(i).count(1)/N)
-    #     state2.append(list(i).count(2)/N)
-
     state0 = [list(i).count(0)/N for i in transposed]
     state1 = [list(i).count(1)/N for i in transposed]
     state2 = [list(i).count(2)/N for i in transposed]
-
-    print('test')
 
     return (state0,state1,state2)
 
@@ -91,7 +65,6 @@ def main():
     n = 15    # chain length
     N = 10000 # experiments
 
-    
     states = markovChain3(P,initial,n)
     state0,state1,state2 = markovExperiment(P,initial,100)
 
